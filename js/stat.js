@@ -9,10 +9,10 @@ function drawCloud(ctx, color, positionX, positionY) {
 }
 
 
-function getMaxTime(times, i) {
+function getMaxTime(times) {
   var amountOfPlayers = times.length;
   var max = -1;
-  for (i = 0; i < amountOfPlayers; i++) {
+  for (var i = 0; i < amountOfPlayers; i++) {
     var time = times[i];
     if (time > max) {
       max = time;
@@ -20,13 +20,7 @@ function getMaxTime(times, i) {
   }
   return max;
 }
-function setColorForPlayers(ctx, times, names) {
-  var playerColor = 'rgba(255, 0, 0, 1)';
-  var amountOfPlayers = times.length;
-  for (var i = 0; i < amountOfPlayers; i++) {
-    ctx.fillStyle = names[i] === 'Вы' ? playerColor : getRandomColor();
-  }
-}
+
 function creatGameChart(times, names, ctx) {
   var histogramHeight = 150;
   var step = histogramHeight / getMaxTime(times);
@@ -43,7 +37,7 @@ function creatGameChart(times, names, ctx) {
   }
 }
 
-window.renderStatistics = function (ctx, times) {
+window.renderStatistics = function (ctx, times, names) {
   drawCloud(ctx, 'rgba(0, 0, 0, 0.7)', 110, 20);
   drawCloud(ctx, 'rgba(256, 256, 256, 1.0)', 100, 10);
 
@@ -51,9 +45,15 @@ window.renderStatistics = function (ctx, times) {
   ctx.font = '16px PT Mono,';
   ctx.fillText('Ура вы победили!', 120, 40);
   ctx.fillText('Список результатов', 120, 60);
+
+  var playerColor = 'rgba(255, 0, 0, 1)';
+  var amountOfPlayers = names.length;
+
+  for (var i = 0; i < amountOfPlayers; i++) {
+    ctx.fillStyle = names[i] === 'Вы' ? playerColor : getRandomColor();
+  }
   getMaxTime(times);
-  creatGameChart();
-  setColorForPlayers();
+  creatGameChart(times, names, ctx);
 };
 
 

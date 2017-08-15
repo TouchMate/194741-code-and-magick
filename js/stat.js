@@ -22,6 +22,7 @@ function getMaxTime(times) {
 }
 
 function creatGameChart(times, names, ctx) {
+
   var histogramHeight = 150;
   var step = histogramHeight / getMaxTime(times);
   ctx.textBaseline = 'bottom';
@@ -36,8 +37,15 @@ function creatGameChart(times, names, ctx) {
     ctx.fillText(Math.floor(times[i]), initialX + indent * i, initialY - times[i] * step);
   }
 }
+function getColorForChart(ctx, names) {
+  var playerColor = 'rgba(255, 0, 0, 1)';
+  var amountOfPlayers = names.length;
+  for (var i = 0; i < amountOfPlayers; i++) {
+    ctx.fillStyle = names[i] === 'Вы' ? playerColor : getRandomColor();
+  }
+}
 
-window.renderStatistics = function (ctx, times, names) {
+window.renderStatistics = function (ctx, names, times) {
   drawCloud(ctx, 'rgba(0, 0, 0, 0.7)', 110, 20);
   drawCloud(ctx, 'rgba(256, 256, 256, 1.0)', 100, 10);
 
@@ -46,14 +54,12 @@ window.renderStatistics = function (ctx, times, names) {
   ctx.fillText('Ура вы победили!', 120, 40);
   ctx.fillText('Список результатов', 120, 60);
 
-  var playerColor = 'rgba(255, 0, 0, 1)';
-  var amountOfPlayers = names.length;
 
-  for (var i = 0; i < amountOfPlayers; i++) {
-    ctx.fillStyle = names[i] === 'Вы' ? playerColor : getRandomColor();
-  }
   getMaxTime(times);
   creatGameChart(times, names, ctx);
+  getColorForChart(ctx, names);
+
+
 };
 
 

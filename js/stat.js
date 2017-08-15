@@ -1,36 +1,42 @@
 'use strict';
+function getRandomColor() {
+  return 'hsl(200, 99%, ' + Math.random() * 100 + '%)';
+}
+
+function drawCloud(ctx, color, positionX, positionY) {
+  ctx.fillStyle = color;
+  ctx.fillRect(positionX, positionY, 420, 270);
+}
+function findMaxValue(max, times) {
+  for (var i = 0; i < times.length; i++) {
+    var time = times[i];
+    if (time > max) {
+      max = time;
+    }
+  }
+}
 
 window.renderStatistics = function (ctx, names, times) {
-
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.fillRect(110, 20, 420, 270);
-
-  ctx.fillStyle = 'rgba(256, 256, 256, 1.0)';
-  ctx.strokeRect(100, 10, 420, 270);
-  ctx.fillRect(100, 10, 420, 270);
-
+  drawCloud(ctx, 'rgba(0, 0, 0, 0.7)', 110, 20);
+  drawCloud(ctx, 'rgba(256, 256, 256, 1.0)', 100, 10);
 
   ctx.fillStyle = '#000';
   ctx.font = '16px PT Mono,';
-
-
   ctx.fillText('Ура вы победили!', 120, 40);
   ctx.fillText('Список результатов', 120, 60);
 
   var max = -1;
-  function findMaxValue() {
-    for (var i = 0; i < times.length; i++) {
-      var time = times[i];
-      if (time > max) {
-        max = time;
-      }
-    }
-  }
-  findMaxValue(max);
+  // for (var i = 0; i < times.length; i++) {
+  //   var time = times[i];
+  //   if (time > max) {
+  //     max = time;
+  //   }
+  // }
+  findMaxValue(max, times);
 
 
   var histogramHeight = 150;
-  var step = histogramHeight / (max);
+  var step = histogramHeight / (max - 0);
   ctx.textBaseline = 'bottom';
   var indent = 100; // px;
   var barWidth = 40; // px;
@@ -38,12 +44,6 @@ window.renderStatistics = function (ctx, names, times) {
   var initialY = 240; // px;
   var playerColor = 'rgba(255, 0, 0, 1)';
 
-  function getRandomColor() {
-    return 'hsl(200, 99%, ' + Math.random() * 100 + '%)';
-  }
-  function assingColorToColumn(i) {
-    ctx.fillStyle = names[i] === 'Вы' ? playerColor : getRandomColor();
-  }
   function buildGameChart(i) {
     ctx.fillRect(initialX + indent * i, initialY - times[i] * step, barWidth, times[i] * step);
   }
@@ -53,12 +53,11 @@ window.renderStatistics = function (ctx, names, times) {
   function addChartNumbers(i) {
     ctx.fillText(Math.floor(times[i]), initialX + indent * i, initialY - times[i] * step);
   }
-
   for (var i = 0; i < times.length; i++) {
-    assingColorToColumn(i);
-    buildGameChart(i);
-    addChartNames(i);
-    addChartNumbers(i);
+    ctx.fillStyle = names[i] === 'Вы' ? playerColor : getRandomColor();
+    buildGameChart();
+    addChartNames();
+    addChartNumbers();
   }
 };
 
